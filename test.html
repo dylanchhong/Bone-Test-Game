@@ -1,0 +1,132 @@
+<h1 style="text-align:center;">Anatomy Quest</h1>
+
+<div id="container">
+    <iframe src="index.html"></iframe>
+    <div><button class="button">Full Screen</button></div>
+    <div style="float:left;width:50%;">
+        <h2 style="text-align:center;">Objective</h2>
+        <p>
+            The objective of this game is to get through the anatomy puzzle within the display room.
+            The player needs to correctly guess which piece is currently presented on the clipboard.
+            This can be accessed by pressing the Tab key. Guesses can be attempted by pressing the e key when close to a
+            piece.
+            There are 25 pieces in total.
+            In order to help keep track of progress there is a complete checklist on one of the walls.
+            This will update with correct guesses.
+            Once the player guesses all of the pieces correctly, they will have completed the game.
+            Starting the game again from the main menu will result in a new puzzle path order.
+        </p>
+    </div>
+
+    <div style="float:left;width:50%;text-align:center;">
+        <h2 style="text-align:center;">Controls</h2>
+        <p>
+        <div style="float:left;width:50%;text-align:center;">
+            Forward - W<br>
+            Left - A<br>
+            Backward - S<br>
+            Right - D<br>
+            Jump - Spacebar<br>
+        </div>
+
+        <div style="text-align:center;">
+            Interact/Guess - E<br>
+            Toggle Clipboard - Tab<br>
+            Rotate Model - Ctrl + Left Click<br>
+            Disengage Rotate - Right Click<br>
+            Move mouse to look around
+        </div>
+        </p>
+    </div>
+</div>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0 auto;
+        background: rgb(255, 255, 255);
+    }
+
+    #container {
+        text-align: center;
+        height: 100%;
+    }
+
+    .button {
+        color: #333;
+        background-color: rgb(206, 206, 206);
+        border-color: rgb(0, 0, 0);
+        font-size: 14px;
+        font-weight: 400;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        padding: 6px 12px;
+    }
+
+    iframe {
+        margin: 20px;
+        width: 960px;
+        height: 600px;
+    }
+</style>
+
+<script>
+    var button = document.querySelector('#container .button');
+    button.addEventListener('click', fullscreen);
+    // when you are in fullscreen, ESC and F11 may not be trigger by keydown listener. 
+    // so don't use it to detect exit fullscreen
+    document.addEventListener('keydown', function (e) {
+        console.log('key press' + e.keyCode);
+    });
+    // detect enter or exit fullscreen mode
+    document.addEventListener('webkitfullscreenchange', fullscreenChange);
+    document.addEventListener('mozfullscreenchange', fullscreenChange);
+    document.addEventListener('fullscreenchange', fullscreenChange);
+    document.addEventListener('MSFullscreenChange', fullscreenChange);
+
+    function fullscreen() {
+        // check if fullscreen mode is available
+        if (document.fullscreenEnabled ||
+            document.webkitFullscreenEnabled ||
+            document.mozFullScreenEnabled ||
+            document.msFullscreenEnabled) {
+
+            // which element will be fullscreen
+            var iframe = document.querySelector('#container iframe');
+            // Do fullscreen
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.webkitRequestFullscreen) {
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.mozRequestFullScreen) {
+                iframe.mozRequestFullScreen();
+            } else if (iframe.msRequestFullscreen) {
+                iframe.msRequestFullscreen();
+            }
+        }
+        else {
+            document.querySelector('.error').innerHTML = 'Your browser is not supported';
+        }
+    }
+
+    function fullscreenChange() {
+        if (document.fullscreenEnabled ||
+            document.webkitIsFullScreen ||
+            document.mozFullScreen ||
+            document.msFullscreenElement) {
+            console.log('enter fullscreen');
+        }
+        else {
+            console.log('exit fullscreen');
+        }
+        // force to reload iframe once to prevent the iframe source didn't care about trying to resize the window
+        // comment this line and you will see
+        var iframe = document.querySelector('iframe');
+        iframe.src = iframe.src;
+    }
+</script>
